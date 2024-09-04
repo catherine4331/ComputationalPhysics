@@ -1,37 +1,21 @@
-use std::f64::consts::PI;
-
 fn main() {
-    let xs = [
-        0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 2.0, 3.0, 4.0, 5.0, 100.0,
-    ];
-    let sines = xs.map(|x| (x, sine_series(x, 10E-12), x.sin()));
+    let c = 10E-14;
 
-    println!(
-        "{0: <10} | {1: <10} | {2: <10} | {3: <10} | {4: <10}",
-        "x", "imax", "sum", "sum - sin(x)", "sum / sin(x)"
-    );
-    for (x, series, exact) in sines {
-        println!(
-            "{0: <10} | {1: <10} | {2:.5} | {3:.5} | {4:.5}",
-            x,
-            series.1,
-            series.0,
-            series.0 - exact,
-            series.0 / exact
-        )
-    }
+    let (alpha, beta) = quadratic_roots(1.0, 1.0, c);
+    let (alpha1, beta1) = other_quadratic_roots(1.0, 1.0, c);
+
+    println!("{} {}", alpha, beta);
+    println!("{} {}", alpha1, beta1);
 }
 
-fn sine_series(x: f64, eps: f64) -> (f64, i32) {
-    let mut term = x;
-    let mut sum = x;
-    let mut n = 2;
+fn quadratic_roots(a: f64, b: f64, c: f64) -> (f64, f64) {
+    let det = (b.powi(2) - 4.0 * a * c).sqrt();
 
-    while (term / sum).abs() > eps {
-        term = -term * x * x / ((2.0 * n as f64 + 1.0) * (2.0 * n as f64 - 2.0));
-        sum = term + sum;
-        n += 1;
-    }
+    ((-b + det) / (2.0 * a), (-b - det) / (2.0 * a))
+}
 
-    (sum, n)
+fn other_quadratic_roots(a: f64, b: f64, c: f64) -> (f64, f64) {
+    let det = (b.powi(2) - 4.0 * a * c).sqrt();
+
+    ((-2.0 * c) / (b + det), (-2.0 * c) / (b - det))
 }
