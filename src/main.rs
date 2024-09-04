@@ -1,20 +1,17 @@
-use std::f64::consts::PI;
-
 fn main() {
-    let r = 1.0;
+    let mut under = 1.0;
+    let mut over = 1.0;
+    let mut i = 0;
 
-    println!(
-        "r, C, A = {}, {}, {}",
-        r,
-        circle_circumference(r),
-        circle_area(r)
-    )
-}
+    loop {
+        under = under / 2.0;
+        over = over * 2.0;
+        i += 1;
 
-fn circle_circumference(r: f64) -> f64 {
-    2.0 * PI * r
-}
+        println!("{} {} {}", i, under, over);
 
-fn circle_area(r: f64) -> f64 {
-    PI * r.powi(2)
+        if under == 0.0 || over == std::f64::INFINITY {
+            break;
+        }
+    }
 }
