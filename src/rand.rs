@@ -12,9 +12,9 @@ impl Rand {
     pub fn new(seed: i64) -> Self {
         Self {
             r: seed,
-            a: 4,
+            a: 57,
             c: 1,
-            m: 9,
+            m: 256,
         }
     }
 
