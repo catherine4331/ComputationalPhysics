@@ -1,9 +1,10 @@
 use random_walk::random_walk_2d;
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 pub mod rand;
 mod random_walk;
 
-const N: i32 = 31;
+const N: i32 = 200;
 
 fn main() {
     // let root_area =
@@ -22,11 +23,10 @@ fn main() {
     // ctx.draw_series(LineSeries::new(data.iter().map(|point| *point), BLUE))
     //     .unwrap();
 
-    let mut r_squared_sum = 0.0;
-    for _ in 0..N {
-        let walk = random_walk_2d(10000);
-        r_squared_sum += walk.r_mean_square;
-    }
+    let r_squared_sum: f64 = (0..N)
+        .into_par_iter()
+        .map(|_| random_walk_2d(90000).r_mean_square)
+        .sum();
 
-    println!("{}", r_squared_sum / N as f64);
+    println!("{}", (r_squared_sum / (N) as f64).sqrt());
 }
