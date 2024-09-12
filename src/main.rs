@@ -1,40 +1,32 @@
-use std::path::Path;
-
-use plotters::{
-    chart::{ChartBuilder, LabelAreaPosition},
-    prelude::{BitMapBackend, IntoDrawingArea},
-    series::LineSeries,
-    style::{
-        full_palette::{AMBER, DEEPORANGE, LIGHTBLUE, ORANGE, PINK},
-        BLACK, BLUE, GREEN, RED, WHITE, YELLOW,
-    },
-};
+use random_walk::random_walk_2d;
 
 pub mod rand;
 mod random_walk;
 
+const N: i32 = 31;
+
 fn main() {
-    let colours = [
-        BLUE, BLACK, RED, GREEN, LIGHTBLUE, YELLOW, PINK, ORANGE, AMBER, DEEPORANGE,
-    ];
+    // let root_area =
+    //     BitMapBackend::new(Path::new("./output/random_walk.png"), (1080, 1080)).into_drawing_area();
+    // root_area.fill(&WHITE).unwrap();
 
-    let root_area =
-        BitMapBackend::new(Path::new("./output/random_walk.png"), (1080, 1080)).into_drawing_area();
-    root_area.fill(&WHITE).unwrap();
+    // let mut ctx = ChartBuilder::on(&root_area)
+    //     .margin(15)
+    //     .set_label_area_size(LabelAreaPosition::Left, 40)
+    //     .set_label_area_size(LabelAreaPosition::Bottom, 40)
+    //     .build_cartesian_2d(-50.0..50.0, -50.0..50.0)
+    //     .unwrap();
 
-    let mut ctx = ChartBuilder::on(&root_area)
-        .margin(15)
-        .set_label_area_size(LabelAreaPosition::Left, 40)
-        .set_label_area_size(LabelAreaPosition::Bottom, 40)
-        .build_cartesian_2d(-50.0..50.0, -50.0..50.0)
-        .unwrap();
+    // ctx.configure_mesh().disable_mesh().draw().unwrap();
 
-    ctx.configure_mesh().disable_mesh().draw().unwrap();
+    // ctx.draw_series(LineSeries::new(data.iter().map(|point| *point), BLUE))
+    //     .unwrap();
 
-    for colour in colours {
-        let data = random_walk::random_walk_2d(1000);
-
-        ctx.draw_series(LineSeries::new(data.iter().map(|point| *point), colour))
-            .unwrap();
+    let mut r_squared_sum = 0.0;
+    for _ in 0..N {
+        let walk = random_walk_2d(10000);
+        r_squared_sum += walk.r_mean_square;
     }
+
+    println!("{}", r_squared_sum / N as f64);
 }

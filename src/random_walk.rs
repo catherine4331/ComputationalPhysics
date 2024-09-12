@@ -2,7 +2,12 @@
 
 use rand::Rng;
 
-pub fn random_walk_2d(n: i64) -> Vec<(f64, f64)> {
+pub struct Walk {
+    pub points: Vec<(f64, f64)>,
+    pub r_mean_square: f64,
+}
+
+pub fn random_walk_2d(n: i64) -> Walk {
     let mut rng = rand::thread_rng();
     let mut points = vec![];
     let mut x = 0.0;
@@ -19,5 +24,8 @@ pub fn random_walk_2d(n: i64) -> Vec<(f64, f64)> {
         y += dy * (1.0 / l);
     }
 
-    points
+    Walk {
+        points,
+        r_mean_square: (x.powi(2) + y.powi(2)),
+    }
 }
